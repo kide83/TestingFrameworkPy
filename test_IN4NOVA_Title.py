@@ -9,6 +9,6 @@ def test_open_in4nova():
     options.add_argument("--user-data-dir=/tmp/chrome-user-data")  # Set a unique user data directory
 
     driver = webdriver.Chrome(options=options)
-    driver.get("https://www.in4nova.com")  # Replace with your actual test URL
-    assert "IN4NOVA" in driver.title  # Simple assertion to check page title
+    driver.get("https://www.in4nova.com")
+    assert "IN4NOVA" in driver.title
     driver.quit()
