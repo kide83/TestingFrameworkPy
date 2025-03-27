@@ -1,17 +1,12 @@
 import logging
 
-# Configure logging
-logging.basicConfig(
-    filename="test_logs.log",
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
+def get_logger(name="automation"):
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.INFO)
 
-def log_info(message):
-    logging.info(message)
+    handler = logging.FileHandler("test_log.log")
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    handler.setFormatter(formatter)
 
-def log_error(message):
-    logging.error(message)
-
-def log_warning(message):
-    logging.warning(message)
+    logger.addHandler(handler)
+    return logger
