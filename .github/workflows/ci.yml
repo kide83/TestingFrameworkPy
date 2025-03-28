@@ -27,7 +27,7 @@ jobs:
 
       - name: Run Selenium Tests
         #run: pytest tests/ --html=reports/report.html
-        run: pytest tests/test_IN4NOVA_Title.py --html=reports/report.html
+        run: pytest test_IN4NOVA_Title.py --html=reports/report.html
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
