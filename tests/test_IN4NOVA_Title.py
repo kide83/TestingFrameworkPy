@@ -1,6 +1,5 @@
 from utils.functions import BrowserManager
 
-
 def test_open_in4nova():
 
     browser = BrowserManager("Chrome")

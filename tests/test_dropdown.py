@@ -6,12 +6,10 @@ def test_dropdown_contains_option():
 
     browser.open_url("https://the-internet.herokuapp.com/dropdown")
 
+    browser.check_dropdown_list_item("dropdown", "id","Option 2")
 
-    dropdown = browser.get_dropdown_list()
-    options = [option.text for option in dropdown.options]
-    dropdown.click()
+    browser.click_dropdown_list_item("dropdown", "id","Option 1")
 
-    expected_option = "Option 2"  # Change this based on what you expect
-    assert expected_option in options, f"'{expected_option}' not found in dropdown options"
+    browser.take_screenshot("drop_down_item_screenshot")
 
     browser.close_browser()
