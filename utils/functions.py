@@ -150,10 +150,64 @@ class BrowserManager:
 ### Treba promeniti kod po potrebi, mozda da koristi ID ili xpath i isprobati na realnom promeru...
 
     def get_table_cell_value(self, table_id, row_index, col_index):
-        table = self.driver.find_element(By.ID, table_id)
-        row_xpath = f"//*[@id='{table_id}']/tbody/tr[{row_index}]/td[{col_index}]"
-        cell = self.driver.find_element(By.XPATH, row_xpath)
+        cell_xpath = f"//*[@id='{table_id}']/tbody/tr[{row_index}]/td[{col_index}]"
+        cell = self.driver.find_element(By.XPATH, cell_xpath)
         return cell.text
+
+    def click_button_in_table_cell(self, table_id, row_index, button_class):
+        """Clicks a button inside a table at a specific row index."""
+        table = self.driver.find_element(By.ID, table_id)
+        rows = table.find_elements(By.TAG_NAME, "tr")
+
+        if 0 < row_index < len(rows):
+            button = rows[row_index].find_element(By.CLASS_NAME, button_class)
+            button.click()
+        else:
+            raise IndexError("Row index out of range")
+
+    # Required for function is_value_found_in_table()
+    def get_table_data(self, table_id):
+        """Extracts all rows from a table and returns them as a list of lists."""
+        table = self.driver.find_element(By.ID, table_id)
+        rows = table.find_elements(By.TAG_NAME, "tr")  # Get all table rows
+
+        table_data = []
+        for row in rows:
+            cells = row.find_elements(By.TAG_NAME, "td")  # Get all cells in row
+            row_data = [cell.text.strip() for cell in cells]  # Extract text
+            if row_data:  # Avoid empty rows (like headers)
+                table_data.append(row_data)
+        return table_data
+
+    def is_value_found_in_table(self, table_id, value):
+        """Checks if a value exists in a table."""
+        table_data = self.get_table_data(table_id)
+        for row in table_data:
+            if value in row:
+                return True
+        return False
+
+    def get_column_number(self, table_id, header_name):
+        """Finds the column number (index) of a given header in a table."""
+        table = self.driver.find_element(By.ID, table_id)
+        header_row = table.find_element(By.TAG_NAME, "tr")  # Get the first row (headers)
+        headers = header_row.find_elements(By.TAG_NAME, "th")  # Get all header columns
+
+        for index, header in enumerate(headers):
+            if header.text.strip() == header_name:
+                return index + 1  # Return 1-based index (like human counting)
+
+        return -1  # Return -1 if header is not found
+
+    def get_rows_count(self, table_id):
+        """Returns the number of rows in the table (excluding headers)."""
+        table = self.driver.find_element(By.ID, table_id)
+        rows = table.find_elements(By.TAG_NAME, "tr")  # Get all rows
+        return len(rows) - 1  # Subtract 1 to exclude header row
+
+
+
+
 
 
 
