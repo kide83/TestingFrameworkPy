@@ -5,6 +5,7 @@ from utils.logger import get_logger
 from selenium.webdriver.support.ui import Select
 import os
 import time
+import random
 
 logger = get_logger()
 
@@ -67,6 +68,22 @@ class BrowserManager:
         selected_option = dropdown.first_selected_option.text
         assert selected_option == item_value, f"Expected '{item_value}', but got '{selected_option}'"
 
+    def click_random_dropdown_list_item(self, locator, locator_type):
+        if locator_type.lower() == "id":
+            dropdown_element = self.driver.find_element(By.ID, locator)
+        elif locator_type.lower() == "xpath":
+            dropdown_element = self.driver.find_element(By.XPATH, locator)
+        else:
+            raise ValueError("Invalid locator type! Use 'id' or 'xpath'.")
+        dropdown = Select(dropdown_element)
+        options = dropdown.options
+
+        if len(options) > 1:
+            random_choice = random.choice(options[1:])  # Skip the first (usually "Select" option)
+            dropdown.select_by_visible_text(random_choice.text)
+        else:
+            raise ValueError("Dropdown does not have enough options to select from.")
+
     def click_element(self, locator, locator_type):
         if locator_type.lower() == "id":
             element = self.driver.find_element(By.ID, locator)
@@ -104,4 +121,44 @@ class BrowserManager:
             raise ValueError("Invalid locator type! Use 'id' or 'xpath'.")
         element.clear()
         element.send_keys(text)
+
+    def click_button(self, locator, locator_type):
+        if locator_type.lower() == "id":
+            button = self.driver.find_element(By.ID, locator)
+        elif locator_type.lower() == "xpath":
+            button = self.driver.find_element(By.XPATH, locator)
+        else:
+            raise ValueError("Invalid locator type! Use 'id' or 'xpath'.")
+        button.click()
+
+    def select_checkbox(self, locator, locator_type):
+        if locator_type.lower() == "id":
+            checkbox = self.driver.find_element(By.ID, locator)
+        elif locator_type.lower() == "xpath":
+            checkbox = self.driver.find_element(By.XPATH, locator)
+        else:
+            raise ValueError("Invalid locator type! Use 'id' or 'xpath'.")
+        checkbox.click()
+
+    def select_radio_button(self, group_name, value):
+        radio_buttons = self.driver.find_elements(By.NAME, group_name)
+        for radio in radio_buttons:
+            if radio.get_attribute("value") == value:
+                radio.click()
+                return
+        raise ValueError(f"Radio button with value '{value}' not found.")
+### Treba promeniti kod po potrebi, mozda da koristi ID ili xpath i isprobati na realnom promeru...
+
+    def get_table_cell_value(self, table_id, row_index, col_index):
+        table = self.driver.find_element(By.ID, table_id)
+        row_xpath = f"//*[@id='{table_id}']/tbody/tr[{row_index}]/td[{col_index}]"
+        cell = self.driver.find_element(By.XPATH, row_xpath)
+        return cell.text
+
+
+
+
+
+
+
 
