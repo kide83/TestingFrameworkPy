@@ -9,7 +9,7 @@ import random
 
 logger = get_logger()
 
-class BrowserManager:
+class BrowserFunctions:
     def __init__(self, browser_name="Chrome"):
         options = Options()
         #options.add_argument("--headless")  # Run in headless mode (no UI)
@@ -207,11 +207,17 @@ class BrowserManager:
 
 
 
+class OtherFunctions:
+    def __init__(self):
+        print(1)
 
+    @staticmethod
+    def generate_random_number(min_value, max_value):
+        return random.randint(min_value, max_value)
 
-
-
-
+    def generate_random_vorschrift_number(self):
+        random_number = self.generate_random_number(1001, 9999)
+        return f"(QS) {random_number}/{random_number + 3}"
 
 
 

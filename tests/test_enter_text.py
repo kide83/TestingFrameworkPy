@@ -1,8 +1,8 @@
-from utils.functions import BrowserManager
+from utils.functions import BrowserFunctions
 
 def test_enter_text():
 
-    browser = BrowserManager("Chrome")
+    browser = BrowserFunctions("Chrome")
 
     browser.open_url("https://the-internet.herokuapp.com/inputs")
 

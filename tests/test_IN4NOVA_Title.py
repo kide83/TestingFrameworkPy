@@ -1,8 +1,8 @@
-from utils.functions import BrowserManager
+from utils.functions import BrowserFunctions
 
 def test_open_in4nova():
 
-    browser = BrowserManager("Chrome")
+    browser = BrowserFunctions("Chrome")
 
     browser.open_url("https://www.in4nova.com")
 

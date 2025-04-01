@@ -1,8 +1,8 @@
-from utils.functions import BrowserManager
+from utils.functions import BrowserFunctions
 from utils.test_data import TEST_USERS
 
 def test_valid_login():
-    browser = BrowserManager("Chrome")
+    browser = BrowserFunctions("Chrome")
 
     browser.open_url("https://the-internet.herokuapp.com/login")
 
