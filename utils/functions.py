@@ -6,8 +6,8 @@ from selenium.webdriver.support.ui import Select
 import os
 import time
 import random
-import pandas as pd
 from openpyxl import load_workbook
+import pdfplumber
 
 logger = get_logger()
 
@@ -250,8 +250,16 @@ class OtherFunctions:
         else:
             raise Exception(f"Column '{column_name}' not found in sheet '{sheet_name}'")
 
+    def is_text_in_pdf(self, file_path, text_to_find, raise_error=False):
+        with pdfplumber.open(file_path) as pdf:
+            for page in pdf.pages:
+                text = page.extract_text()
+                if text and text_to_find in text:
+                    return True
 
-
+        if raise_error:
+            raise AssertionError(f"Text '{text_to_find}' not found in PDF: {file_path}")
+        return False
 
 
 

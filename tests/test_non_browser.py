@@ -18,6 +18,10 @@ def test_non_browser():
     #functions.write_to_excel(r"C:\TestingFrameworkPy\testdata\test_data.xlsx", "Regulations", "Name", 2, "Test123")
 
     # Read PDF file
+    assert functions.is_text_in_pdf(
+        "C:/TestingFrameworkPy/testdata/DejanMirkovic.pdf",
+        "UGOVOR O RADU"
+    ), "UGOVOR O RADU was not found in pdf file."
 
 
 
