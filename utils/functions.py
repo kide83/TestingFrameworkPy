@@ -12,7 +12,7 @@ import pdfplumber
 logger = get_logger()
 
 class BrowserFunctions:
-    def __init__(self, browser_name="Chrome"):
+    def __init__(self, browser_name):
         options = Options()
         #options.add_argument("--headless")  # Run in headless mode (no UI)
         options.add_argument("--no-sandbox")  # Bypass OS security model
@@ -217,20 +217,23 @@ class OtherFunctions:
     def generate_random_number(min_value, max_value):
         return random.randint(min_value, max_value)
 
-    def generate_random_vorschrift_number(self):
-        random_number = self.generate_random_number(1001, 9999)
+    @staticmethod
+    def generate_random_vorschrift_number():
+        random_number = OtherFunctions.generate_random_number(1001, 9999)
         return f"(QS) {random_number}/{random_number + 3}"
 
-    def generate_random_arbeitskreiss_number(self):
-        random_number = self.generate_random_number(1001, 9999)
+    @staticmethod
+    def generate_random_arbeitskreiss_number():
+        random_number = OtherFunctions.generate_random_number(1001, 9999)
         return f"AK_QSIT_{random_number}"
 
-    def get_value_from_excel(self, file_path, sheet_name, column_name, row_index):
+    @staticmethod
+    def get_value_from_excel(file_path, sheet_name, column_name, row_index):
         """Reads an Excel file and gets a value from a specific column and row in a given sheet."""
         # row_index = 2 je prvi red, red 1 je headers
-        self.file_path = file_path
-        self.workbook = load_workbook(file_path)
-        sheet = self.workbook[sheet_name]
+        OtherFunctions.file_path = file_path
+        OtherFunctions.workbook = load_workbook(file_path)
+        sheet = OtherFunctions.workbook[sheet_name]
         headers = [cell.value for cell in sheet[1]]
         if column_name in headers:
             col_index = headers.index(column_name) + 1
@@ -238,19 +241,21 @@ class OtherFunctions:
         else:
             raise Exception(f"Column '{column_name}' not found in sheet '{sheet_name}'")
 
-    def write_to_excel(self, file_path, sheet_name, column_name, row_index, value):
-        self.file_path = file_path
-        self.workbook = load_workbook(file_path)
-        sheet = self.workbook[sheet_name]
+    @staticmethod
+    def write_to_excel(file_path, sheet_name, column_name, row_index, value):
+        OtherFunctions.file_path = file_path
+        OtherFunctions.workbook = load_workbook(file_path)
+        sheet = OtherFunctions.workbook[sheet_name]
         headers = [cell.value for cell in sheet[1]]
         if column_name in headers:
             col_index = headers.index(column_name) + 1
             sheet.cell(row=row_index, column=col_index).value = value
-            self.workbook.save(self.file_path)
+            OtherFunctions.workbook.save(OtherFunctions.file_path)
         else:
             raise Exception(f"Column '{column_name}' not found in sheet '{sheet_name}'")
 
-    def is_text_in_pdf(self, file_path, text_to_find, raise_error=False):
+    @staticmethod
+    def is_text_in_pdf(file_path, text_to_find, raise_error=False):
         with pdfplumber.open(file_path) as pdf:
             for page in pdf.pages:
                 text = page.extract_text()
