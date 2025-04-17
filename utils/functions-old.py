@@ -12,42 +12,38 @@ import pdfplumber
 
 logger = get_logger()
 
-class Browser:
+class BrowserFunctions:
     def __init__(self, browser_name):
-        self.browser_name = browser_name.lower()
-
-    def start(self):
-        if self.browser_name == "chrome":
+        """Initialize the browser based on the given name."""
+        if browser_name.lower() == "chrome":
+            logger.info("Starting Chrome WebDriver")
             options = Options()
             # options.add_argument("--headless")  # Run in headless mode (no UI)
-            options.add_argument("--no-sandbox")
-            options.add_argument("--disable-dev-shm-usage")
-            options.add_argument("--user-data-dir=/tmp/chrome-user-data")
-            browser = webdriver.Chrome(options=options)
-        elif self.browser_name == "edge":
+            options.add_argument("--no-sandbox")  # Bypass OS security model
+            options.add_argument("--disable-dev-shm-usage")  # Prevent /dev/shm issues
+            options.add_argument("--user-data-dir=/tmp/chrome-user-data")  # Set a unique user data directory
+            self.driver = webdriver.Chrome(options=options)
+            self.driver.maximize_window()
+            self.driver.implicitly_wait(10)
+        elif browser_name.lower() == "edge":
+            logger.info("Starting Edge WebDriver")
             options = EdgeOptions()
             # options.add_argument("--headless")  # Run in headless mode (no UI)
-            options.add_argument("--no-sandbox")
-            options.add_argument("--disable-dev-shm-usage")
-            options.add_argument("--user-data-dir=/tmp/chrome-user-data")
-            browser = webdriver.Edge(options=options)
+            options.add_argument("--no-sandbox")  # Bypass OS security model
+            options.add_argument("--disable-dev-shm-usage")  # Prevent /dev/shm issues
+            options.add_argument("--user-data-dir=/tmp/chrome-user-data")  # Set a unique user data directory
+            self.driver = webdriver.Edge(options=options)
+            self.driver.maximize_window()
+            self.driver.implicitly_wait(10)
         else:
-            raise ValueError(f"Unsupported browser: {self.browser_name}")
-
-        browser.maximize_window()
-        browser.implicitly_wait(10)
-        return browser
-
-
-class BrowserFunctions(Browser):
-    def __init__(self, browser_name):
-        super().__init__(browser_name)
-        self.driver = self.start()  # Get the driver from parent
+            raise ValueError(f"Unsupported browser: {browser_name}")
 
     def open_url(self, url):
+        """Open a URL in the selected browser."""
         self.driver.get(url)
 
     def close_browser(self):
+        """Close the browser instance."""
         logger.info("Closing WebDriver")
         self.driver.quit()
 
